@@ -33,7 +33,7 @@
                 </div>
             </form>
 
-            <form id="edit-form">
+            <form id="edit-form" class="hide">
                 <p>Edite sua tarefa:</p>
                 <div class="form-control">
                     <input type="text" id="edit-input">
@@ -56,7 +56,7 @@
                         </button>
                     </form>
                 </div>
-                <div class="filter">
+                <div id="filter">
                     <h4>Filtrar:</h4>
                     <select id="filter-select">\
                         <option value="all">Todos</option>
@@ -67,8 +67,32 @@
             </div>
 
             <div id="tarefas-list">
-                <div class="tarefas">
+                <div class="tarefa done">
                     <h3>Estou fazendo alguma coisa...</h3>
+                    <button class="finish-tarefa">
+                        <i class="fa-solid fa-check"></i>
+                    </button>
+                    <button class="edit-tarefa">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button class="delete-tarefa">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="tarefa">
+                    <h3>Comprar um cigas...</h3>
+                    <button class="finish-tarefa">
+                        <i class="fa-solid fa-check"></i>
+                    </button>
+                    <button class="edit-tarefa">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button class="delete-tarefa">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="tarefa">
+                    <h3>ir ali...</h3>
                     <button class="finish-tarefa">
                         <i class="fa-solid fa-check"></i>
                     </button>
