@@ -6,6 +6,9 @@ const tarefasList = document.querySelector("#tarefas-list");
 const editForm = document.querySelector("#edit-form");
 const editInput = document.querySelector("#edit-input");
 const cancelEditBtn = document.querySelector("#cancel-edit-btn");
+const searchInput = document.querySelector("#search-input");
+const eraseBtn = document.querySelector("#erase-btn");
+const filterSelect = document.querySelector("#filter-select");
 
 let oldTitle;
 
@@ -59,6 +62,53 @@ const updateTarefa = (input) => {
 	});
 }
 
+const searchTarefa = (search) => {
+	const tarefas = tarefasList.querySelectorAll(".tarefa");
+
+	tarefas.forEach(tarefa => {
+		const tarefaTitle = tarefa.querySelector("h3").innerText.toLowerCase();
+
+		tarefa.style.display = "flex";
+
+		if(!tarefaTitle.includes(search)){
+			tarefa.style.display = "none";
+		}
+	});
+}
+
+const filterTarefas = (filter) => {
+	const tarefas = tarefasList.querySelectorAll(".tarefa");
+
+	tarefas.forEach(tarefa => {
+		switch(filter) {
+			case "all":
+				tarefas.forEach(tarefa => {
+					tarefa.style.display = "flex";
+				});
+
+				break;
+
+			case "done":
+				tarefas.forEach(tarefa => {
+					tarefa.classList.contains("done") ? (tarefa.style.display = "flex") : (tarefa.style.display = "none");
+				});
+
+				break;
+				
+			case "todo":
+				tarefas.forEach(tarefa => {
+					tarefa.classList.contains("done") ? (tarefa.style.display = "none") : (tarefa.style.display = "flex");
+				});
+
+				break;
+
+			default:
+				break;
+					
+		}
+	});
+}
+
 // Eventos
 
 addForm.addEventListener("submit", (e) => {
@@ -106,4 +156,23 @@ editForm.addEventListener("submit", (e) => {
 	}
 
 	toggleForms();
+});
+
+searchInput.addEventListener("keyup", () => {
+	const search = searchInput.value;
+
+	searchTarefa(search);
+});
+
+eraseBtn.addEventListener("click", (e) => {
+	e.preventDefault();
+
+	searchInput.value = "";
+	searchTarefa("");
+});
+
+filterSelect.addEventListener("change", () =>{
+	const filter = filterSelect.value;
+
+	filterTarefas(filter);
 });
