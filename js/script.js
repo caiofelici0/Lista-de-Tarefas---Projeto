@@ -14,7 +14,7 @@ let oldTitle;
 
 // Funções
 
-const saveTarefa = (title) => {
+const saveTarefa = (title, done = 0, save = 1) => {
 	const tarefa = document.createElement("div");
 	tarefa.classList.add("tarefa");
 	
@@ -38,6 +38,14 @@ const saveTarefa = (title) => {
 	tarefa.appendChild(deleteBtn);
 	
 	tarefasList.appendChild(tarefa);
+
+	if(done){
+		tarefa.classList.add("done");
+	}
+
+	if(save){
+		saveTarefaLocalStorage({title, done: 0});
+	}
 	
 	addInput.value = "";
 	addInput.focus();
@@ -59,6 +67,7 @@ const updateTarefa = (input) => {
 			title.innerText = input;
 		}
 
+		updateTarefasLocalStorage(oldTitle, input);
 	});
 }
 
@@ -129,6 +138,8 @@ tarefasList.addEventListener("click", (e) => {
 	if(targetBtn.classList.contains("done-tarefa")){
 		tarefaBtn.classList.toggle("done");
 		targetBtn.classList.toggle("done-btn");
+
+		updateStatusLocalStorage(oldTitle);
 	}
 	
 	if(targetBtn.classList.contains("edit-tarefa")){
@@ -137,6 +148,8 @@ tarefasList.addEventListener("click", (e) => {
 	
 	if(targetBtn.classList.contains("delete-tarefa")){
 		tarefaBtn.remove();
+
+		removeTarefaLocalStorage(oldTitle);
 	}
 });
 
@@ -176,3 +189,56 @@ filterSelect.addEventListener("change", () =>{
 
 	filterTarefas(filter);
 });
+
+// Local Storage
+
+const getTarefasLocalStorage = () => {
+	const tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
+
+	return tarefas;
+}
+
+const loadTarefas = () => {
+	const tarefas = getTarefasLocalStorage();
+
+	tarefas.forEach(tarefa => {
+		saveTarefa(tarefa.title, tarefa.done, 0);
+	});
+}
+
+const saveTarefaLocalStorage = (tarefa) => {
+	const tarefas = getTarefasLocalStorage();
+
+	tarefas.push(tarefa);
+	localStorage.setItem("tarefas", JSON.stringify(tarefas));
+}
+
+const removeTarefaLocalStorage = (title) => {
+	const tarefas = getTarefasLocalStorage();
+
+	const filteredTarefas = tarefas.filter(tarefa => tarefa.title != title);
+
+	localStorage.setItem("tarefas", JSON.stringify(filteredTarefas));
+}
+
+const updateStatusLocalStorage = (title) => {
+	const tarefas = getTarefasLocalStorage();
+
+	tarefas.map(tarefa => {
+		tarefa.title === title ? (tarefa.done = !tarefa.done) : null;
+	});
+
+	localStorage.setItem("tarefas", JSON.stringify(tarefas));
+}
+
+const updateTarefasLocalStorage = (old, newTitle) => {
+	const tarefas = getTarefasLocalStorage();
+
+	tarefas.map(tarefa =>{
+		tarefa.title === old ? (tarefa.title = newTitle) : null;
+	});
+
+	localStorage.setItem("tarefas", JSON.stringify(tarefas));
+}
+
+loadTarefas();
